@@ -33,8 +33,7 @@ class Converter:
     def convert(self):
         return self.conversion_type.convert(self.value)
 
-# input output
-class UserInterface:
+class InputHandler:
     def get_input(self):
         while True:
             try:
@@ -43,35 +42,43 @@ class UserInterface:
             except ValueError:
                 print("Invalid input, please try again.")
         return value
-    
-    def get_conversion_type(self):
-        while True:
-            print("Select conversion type:\n1. Feet to meters\n2. Gallons to liters\n3. Fahrenheit to Celsius\n4. Pound to Kilogram")
-            try:
-                choice = int(input("Enter choice: "))
-                if choice == 1:
-                    return LengthConversion()
-                elif choice == 2:
-                    return VolumeConversion()
-                elif choice == 3:
-                    return TemperatureConversion()
-                elif choice == 4:
-                    return MassConversion()
-                else:
-                    print("Invalid choice, please try again.")
-            except ValueError:
-                print("Invalid input, please try again.")
-    
+
+class OutputHandler:
     def display_output(self, result):
         print("Result:", result)
 
+class ConversionTypeSelector:
+    def __init__(self):
+        self.conversions = {
+            1: LengthConversion(),
+            2: VolumeConversion(),
+            3: TemperatureConversion(),
+            4: MassConversion()
+        }
+
+    def select_conversion_type(self, choice):
+        try:
+            return self.conversions[choice]
+        except KeyError:
+            raise ValueError("Invalid choice, please try again.")
+
 def main():
-    ui = UserInterface()
-    value = ui.get_input()
-    conversion_type = ui.get_conversion_type()
+    input_handler = InputHandler()
+    value = input_handler.get_input()
+    selector = ConversionTypeSelector()
+    while True:
+        print("Select conversion type:\n1. Feet to meters\n2. Gallons to liters\n3. Fahrenheit to Celsius\n4. Pound to Kilogram")
+        try:
+            choice = int(input("Enter choice: "))
+            conversion_type = selector.select_conversion_type(choice)
+            break
+        except ValueError as e:
+           print(str(e)) 
+    converter = Converter(conversion_type, value)
     converter = Converter(conversion_type, value)
     result = converter.convert()
-    ui.display_output(result)
+    output_handler = OutputHandler()
+    output_handler.display_output(result)
 
 if __name__ == "__main__":
     main()
