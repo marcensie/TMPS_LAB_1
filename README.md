@@ -23,7 +23,7 @@ class Converter:
         return self.conversion_type.convert(self.value)
 
 ```
-### OCP:The UnitConversion interface is open for extension (new conversion types can be added) but closed for modification, LengthConversion, VolumeConversion, TemperatureConversion, MassConversion classes each extend the UnitConversion.
+### OCP: The UnitConversion interface is open for extension (new conversion types can be added) but closed for modification, LengthConversion, VolumeConversion, TemperatureConversion, MassConversion classes each extend the UnitConversion.
 ```
 class UnitConversion(ABC):
     @abstractmethod
@@ -34,7 +34,7 @@ class LengthConversion(UnitConversion):
     def convert(self, value):
         return value * 0.3048 
 ```
-### LSP:The LengthConversion, VolumeConversion, TemperatureConversion, MassConversion classes can be used as a substitute for the UnitConversion class without affecting the correctness of the program.
+### LSP: The LengthConversion, VolumeConversion, TemperatureConversion, MassConversion classes can be used as a substitute for the UnitConversion class without affecting the correctness of the program.
 ```
 class UnitConversion(ABC):
     @abstractmethod
@@ -44,22 +44,37 @@ class UnitConversion(ABC):
  class VolumeConversion(UnitConversion):
     def convert(self, value):
         return value * 3.78541 
-        
-  choice = int(input("Enter choice: "))
-                if choice == 1:
-                    return LengthConversion()
-                elif choice == 2:
-                    return VolumeConversion()
-                elif choice == 3:
-                    return TemperatureConversion()
-                elif choice == 4:
-                    return MassConversion()
-        
 ```
-### ISP:
+### ISP: Each class has only the methods it needs, and no unnecessary methods or dependencies are added.
 
-### DIP:
+### DIP: The code follows the DIP by depending on abstractions rather than concrete implementations. For example, the Converter class depends on the abstract class UnitConversion, and the ConversionTypeSelector class depends on the interface defined by the UnitConversion class. 
+```
+class UnitConversion(ABC):
+    @abstractmethod
+    def convert(self, value):
+        pass
 
+class Converter:
+    def __init__(self, conversion_type, value):
+        self.conversion_type = conversion_type
+        self.value = value
+    
+    def convert(self):
+        return self.conversion_type.convert(self.value)
+        
+class ConversionTypeSelector:
+    def __init__(self):
+        self.conversions = {
+            1: LengthConversion(),
+            2: VolumeConversion(),
+            3: TemperatureConversion(),
+            4: MassConversion()
+        }
 
-
+    def select_conversion_type(self, choice):
+        try:
+            return self.conversions[choice]
+        except KeyError:
+            raise ValueError("Invalid choice, please try again.")
+```
 
