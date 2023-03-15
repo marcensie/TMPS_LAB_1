@@ -46,6 +46,21 @@ class UnitConversion(ABC):
         return value * 3.78541 
 ```
 ### ISP: Each class has only the methods it needs, and no unnecessary methods or dependencies are added.
+```
+class InputHandler:
+    def get_input(self):
+        while True:
+            try:
+                value = float(input("Enter value to convert: "))
+                break
+            except ValueError:
+                print("Invalid input, please try again.")
+        return value
+
+class OutputHandler:
+    def display_output(self, result):
+        print("Result:", result)
+```
 
 ### DIP: The Converter class depends on the UnitConversion abstract class and not on its concrete implementations. This is achieved through the use of dependency injection in the Converter constructor, where an instance of a concrete subclass of UnitConversion is passed as an argument.
 ```
