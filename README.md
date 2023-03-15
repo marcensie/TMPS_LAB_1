@@ -47,7 +47,7 @@ class UnitConversion(ABC):
 ```
 ### ISP: Each class has only the methods it needs, and no unnecessary methods or dependencies are added.
 
-### DIP: The code follows the DIP by depending on abstractions rather than concrete implementations. For example, the Converter class depends on the abstract class UnitConversion, and the ConversionTypeSelector class depends on the interface defined by the UnitConversion class. 
+### DIP: The Converter class depends on the UnitConversion abstract class and not on its concrete implementations. This is achieved through the use of dependency injection in the Converter constructor, where an instance of a concrete subclass of UnitConversion is passed as an argument.
 ```
 class UnitConversion(ABC):
     @abstractmethod
